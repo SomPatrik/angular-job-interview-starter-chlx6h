@@ -28,7 +28,8 @@ export class ListComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private acRoute:ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -63,7 +64,7 @@ export class ListComponent implements OnInit {
   }
 
   openDetail(id: number) {
-    alert(`open detail ${id}`);
+   this.router.navigate([`./${id}`,],{relativeTo: this.acRoute});
   }
 }
 

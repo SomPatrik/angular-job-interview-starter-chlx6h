@@ -14,4 +14,5 @@ export interface GithubIssue {
   number: string;
   state: string;
   title: string;
+  url:string;
 }

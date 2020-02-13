@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule,Injectable } from '@angular/core';
+import { Resolve, Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes,ActivatedRouteSnapshot,RouterStateSnapshot } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -13,6 +14,23 @@ import { ListComponent } from './list/list.component';
 import { ListModule } from './list/list.module';
 import { DetailModule } from './detail/detail.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { GithubIssue, GithubApi } from './models/models'
+import { merge, Observable, of as observableOf } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+
+@Injectable({ providedIn: 'root' })
+export class MyResolve implements Resolve<GithubIssue> {
+  constructor(private http: HttpClient) { }
+  private url = 'https://api.github.com/repos/angular/angular/issues'
+
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<any>|Promise<any>|any {
+    return this.http.get<any>(`${this.url}/${route.paramMap.get('id')}`);
+  }
+}
 
 const appRoutes: Routes = [
   {
@@ -22,6 +40,13 @@ const appRoutes: Routes = [
   {
     path: 'list',
     component: ListComponent
+  },
+  {
+    path: 'list/:id',
+    component: DetailComponent,
+     resolve: {
+          detail: MyResolve
+        }
   },
   {
     path: '',

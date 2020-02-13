@@ -22,7 +22,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+ this.data = this.activatedRoute.snapshot.data.detail;
   }
 
   ngOnDestroy(): void {
