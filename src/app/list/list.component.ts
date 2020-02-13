@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { merge, Observable, of as observableOf } from 'rxjs';
+import { delay} from 'rxjs/operators';
 import { catchError, map, startWith, switchMap, debounceTime } from 'rxjs/operators';
 import { GithubIssue, GithubApi } from '../models/models'
 import { FormControl } from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-list',
@@ -17,7 +19,8 @@ export class ListComponent implements OnInit {
 
   displayedColumns: string[] = ['created', 'state', 'number', 'title'];
   exampleDatabase: ExampleHttpDatabase | null;
-  data: GithubIssue[] = [];
+  //data: GithubIssue[] = [];
+  data =  new MatTableDataSource< GithubIssue>([]);
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -34,6 +37,12 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.exampleDatabase = new ExampleHttpDatabase(this.http);
+  this.data.filterPredicate = (data,filter)=> data.title.includes(filter.toLowerCase());
+    this.filter.valueChanges.pipe(
+      delay(1000)
+    ).subscribe(x=>{
+      this.data.filter = x.trim().toLowerCase();
+    })
 
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -60,7 +69,7 @@ export class ListComponent implements OnInit {
           this.isRateLimitReached = true;
           return observableOf([]);
         })
-      ).subscribe(data => this.data = data);
+      ).subscribe(data => this.data.data = data);
   }
 
   openDetail(id: number) {
