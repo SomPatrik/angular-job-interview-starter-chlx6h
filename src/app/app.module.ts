@@ -22,7 +22,12 @@ const appRoutes: Routes = [
   {
     path: 'list',
     component: ListComponent
-  }
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

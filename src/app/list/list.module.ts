@@ -7,10 +7,7 @@ import { MatProgressSpinnerModule, MatTableModule, MatPaginatorModule, MatSortMo
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 const routes = [
-  {
-    path: '',
-    component: ListComponent
-  }
+
 ];
 
 @NgModule({
