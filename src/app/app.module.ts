@@ -17,6 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { GithubIssue, GithubApi } from './models/models'
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { MyInterceptor } from './interceptor';
+
 
 
 @Injectable({ providedIn: 'root' })
@@ -70,9 +72,12 @@ const appRoutes: Routes = [
     ListModule,
     DetailModule
   ],
-  providers: [
-
-  ],
+ providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyInterceptor,
+      multi: true
+    }],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
